@@ -1,7 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, { HydratedDocument } from 'mongoose';
+import { HydratedDocument } from 'mongoose';
 import { User } from '../entities/user.entity';
-import { TaskSchema } from 'src/task/schemas/task.schema';
 
 export type UserDocument = HydratedDocument<UserSchema>;
 
@@ -11,8 +10,8 @@ export class UserSchema implements User {
   name: string;
   @Prop()
   email: string;
-  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'tasks' }] })
-  tasks?: Array<TaskSchema>;
+  @Prop()
+  password: string;
 }
 
 export const UserSchemaFactory = SchemaFactory.createForClass(UserSchema);
