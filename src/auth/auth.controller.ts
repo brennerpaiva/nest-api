@@ -8,10 +8,10 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { AuthDto } from './dto/auth.dto';
 import { AuthGuard } from './auth.guard';
+import { AuthService } from './auth.service';
 import { Public } from './constants/constants';
+import { SignInDto } from './dto/sign-in.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -20,13 +20,14 @@ export class AuthController {
   @Public()
   @HttpCode(HttpStatus.OK)
   @Post('login')
-  async signIn(@Body() auth: AuthDto) {
-    return await this.authService.signIn(auth.email);
+  async signIn(@Body() signIn: SignInDto) {
+    return await this.authService.signIn(signIn);
   }
 
   @UseGuards(AuthGuard)
   @Get('profile')
-  getProfile(@Request() req) {
-    return req.user;
+  async getProfile(@Request() req) {
+    const { userEmail } = req.user;
+    return await this.authService.profile(userEmail);
   }
 }
